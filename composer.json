@@ -1,0 +1,21 @@
+{
+  "name": "berkanumutlu/php-web-tools",
+  "type": "project",
+  "description": "PHP Web Tools by Berkan Ümütlü",
+  "keywords": ["php", "web", "tools", "php web tools"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Berkan Ümütlü",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/berkanumutlu/php-web-tools",
+  "support": {
+    "issues": "https://github.com/berkanumutlu/php-web-tools/issues",
+    "security": "https://github.com/berkanumutlu/php-web-tools/security/policy"
+  },
+  "require": {
+    "php": ">=5.6"
+  }
+}
