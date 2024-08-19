@@ -14,7 +14,9 @@ if (!empty($_POST['ping_form'])) {
             $latency = $ping->ping();
             if ($latency !== false) {
                 $response->setMessage('Latency is '.$latency.' ms');
-                $response->setData(str_replace('\n', '<br>', $ping->getCommandOutput()));
+                if (!empty($ping->getCommandOutput())) {
+                    $response->setData(str_replace('\n', '<br>', $ping->getCommandOutput()));
+                }
                 $response->setStatus(true);
             } else {
                 $response->setMessage('Host could not be reached.');

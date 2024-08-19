@@ -1,7 +1,7 @@
 :root {
     --font-family: Inter, Helvetica Neue, Helvetica, Arial;
     --color-primary: #007791;
-    --color-primary-hover: #038aa6;
+    --color-primary-hover: #0497b6;
     --color-primary-active: #EC1B2A;
     --color-secodary: #00AFF0;
     --color-secodary-hover: #006FF0;
@@ -26,7 +26,8 @@ a {
 }
 
 a:hover {
-    color: var(--color-primary-hover);
+    /*color: var(--color-primary-hover);*/
+    filter: brightness(1.5);
 }
 
 .alert-message {
