@@ -2,7 +2,7 @@
 
 namespace App\Library;
 
-class Ping
+class WebTools
 {
     private $host;
     private $ttl;

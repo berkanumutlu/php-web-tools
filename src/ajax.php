@@ -7,7 +7,7 @@ if (!empty($_POST['ping_form'])) {
         $response->setMessage('Please fill in the required fields.');
     } else {
         try {
-            $ping = new \App\Library\Ping(trim($_POST["hostname"]), trim($_POST["ttl"]), trim($_POST["timeout"]));
+            $ping = new \App\Library\WebTools(trim($_POST["hostname"]), trim($_POST["ttl"]), trim($_POST["timeout"]));
             if (!empty(trim($_POST["parameters"]))) {
                 $ping->setCustomCommands(trim($_POST["parameters"]));
             }
