@@ -5,12 +5,13 @@ namespace App\Library;
 class WebTools
 {
     private $host;
+    private $port = 80;
     private $ttl;
     private $timeout;
-    private $port = 80;
-    private $data = 'Ping';
-    private $customCommands;
     private $commandOutput;
+    private $customCommands;
+    private $data = 'Ping';
+    private $type;
 
     /**
      * Called when the Ping object is created.
@@ -42,47 +43,14 @@ class WebTools
     }
 
     /**
-     * Set the ttl (in hops).
+     * Get the host.
      *
-     * @param  int  $ttl
-     *   TTL in hops.
+     * @return string
+     *   The current hostname for Ping.
      */
-    public function setTtl($ttl)
+    public function getHost()
     {
-        $this->ttl = $ttl;
-    }
-
-    /**
-     * Get the ttl.
-     *
-     * @return int
-     *   The current ttl for Ping.
-     */
-    public function getTtl()
-    {
-        return $this->ttl;
-    }
-
-    /**
-     * Set the timeout.
-     *
-     * @param  int  $timeout
-     *   Time to wait in seconds.
-     */
-    public function setTimeout($timeout)
-    {
-        $this->timeout = $timeout;
-    }
-
-    /**
-     * Get the timeout.
-     *
-     * @return int
-     *   Current timeout for Ping.
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
+        return $this->host;
     }
 
     /**
@@ -97,14 +65,14 @@ class WebTools
     }
 
     /**
-     * Get the host.
+     * Get the port (only used for fsockopen method).
      *
-     * @return string
-     *   The current hostname for Ping.
+     * @return int
+     *   The port used by fsockopen pings.
      */
-    public function getHost()
+    public function getPort()
     {
-        return $this->host;
+        return $this->port;
     }
 
     /**
@@ -123,14 +91,47 @@ class WebTools
     }
 
     /**
-     * Get the port (only used for fsockopen method).
+     * Get the ttl.
      *
      * @return int
-     *   The port used by fsockopen pings.
+     *   The current ttl for Ping.
      */
-    public function getPort()
+    public function getTtl()
     {
-        return $this->port;
+        return $this->ttl;
+    }
+
+    /**
+     * Set the ttl (in hops).
+     *
+     * @param  int  $ttl
+     *   TTL in hops.
+     */
+    public function setTtl($ttl)
+    {
+        $this->ttl = $ttl;
+    }
+
+    /**
+     * Get the timeout.
+     *
+     * @return int
+     *   Current timeout for Ping.
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set the timeout.
+     *
+     * @param  int  $timeout
+     *   Time to wait in seconds.
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
     }
 
     /**
@@ -153,19 +154,6 @@ class WebTools
     }
 
     /**
-     * Matches an IP on command output and returns.
-     * @return string
-     */
-    public function getIpAddress()
-    {
-        $out = array();
-        if (preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $this->commandOutput, $out)) {
-            return $out[0];
-        }
-        return null;
-    }
-
-    /**
      * Get optional parameters
      * @return mixed
      */
@@ -181,6 +169,35 @@ class WebTools
     public function setCustomCommands($customCommands)
     {
         $this->customCommands = $customCommands;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param  mixed  $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Matches an IP on command output and returns.
+     * @return string
+     */
+    public function getIpAddress()
+    {
+        $out = array();
+        if (preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $this->commandOutput, $out)) {
+            return $out[0];
+        }
+        return null;
     }
 
     /**
@@ -374,5 +391,34 @@ class WebTools
         }
 
         return pack('n*', ~$sum);
+    }
+
+    public function nslookup()
+    {
+        $address = false;
+        $host = !empty($this->host) ? escapeshellcmd($this->host) : null;
+        $timeout = !empty($this->timeout) ? escapeshellcmd($this->timeout) : null;
+        $type = !empty($this->type) ? escapeshellcmd($this->type) : null;
+        $exec_string = 'nslookup '.$host;
+        if (!empty($type)) {
+            $exec_string .= ' -type='.$type;
+        }
+        if (!empty($timeout)) {
+            $exec_string .= ' -timeout='.($timeout * 1000);
+        }
+        if ($this->getCustomCommands()) {
+            $exec_string .= ' '.$this->getCustomCommands();
+        }
+        exec($exec_string, $output, $return);
+        $this->setCommandOutput(implode('\n', $output));
+        $output = array_values(array_filter($output));
+        if (!empty($output)) {
+            $address = [];
+            $list = preg_grep('/^Address: /', $output);
+            foreach ($list as $item) {
+                $address[] = str_replace('Address: ', '', $item);
+            }
+        }
+        return $address;
     }
 }
