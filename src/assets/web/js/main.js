@@ -30,7 +30,7 @@ $(document).ready(function () {
             dataType: "JSON"
         }).done(function (response) {
             if (response.hasOwnProperty('message')) {
-                alertText.text(response.message);
+                alertText.html(response.message);
             }
             if (response.hasOwnProperty('status')) {
                 if (response.status) {
