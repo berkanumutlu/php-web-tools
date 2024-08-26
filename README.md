@@ -17,7 +17,10 @@ It is a project that contains tools that you can use on your web page.
 
 ## Screenshots
 
+- Ping
 ![screenshot01-ping-form](screenshots/ping.png)
+- Nslookup
+![screenshot01-nslookup-form](screenshots/nslookup.png)
 
 ## License
 
