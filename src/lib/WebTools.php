@@ -14,35 +14,6 @@ class WebTools
     private $type;
 
     /**
-     * Called when the Ping object is created.
-     *
-     * @param  string  $host
-     *   The host to be pinged.
-     * @param  int  $ttl
-     *   Time-to-live (TTL) (You may get a 'Time to live exceeded' error if this
-     *   value is set too low. The TTL value indicates the scope or range in which
-     *   a packet may be forwarded. By convention:
-     *     - 0 = same host
-     *     - 1 = same subnet
-     *     - 32 = same site
-     *     - 64 = same region
-     *     - 128 = same continent
-     *     - 255 = unrestricted
-     * @param  int  $timeout
-     *   Timeout (in seconds) used for ping and fsockopen().
-     * @throws \Exception if the host is not set.
-     */
-    public function __construct($host, $ttl = 255, $timeout = 10)
-    {
-        if (!isset($host)) {
-            throw new \Exception("Host name not found.");
-        }
-        $this->host = $host;
-        $this->ttl = $ttl;
-        $this->timeout = $timeout;
-    }
-
-    /**
      * Get the host.
      *
      * @return string
@@ -393,6 +364,9 @@ class WebTools
         return pack('n*', ~$sum);
     }
 
+    /**
+     * @return array
+     */
     public function nslookup()
     {
         $address = false;
@@ -420,5 +394,30 @@ class WebTools
             }
         }
         return $address;
+    }
+
+    /**
+     * @return false|mixed
+     */
+    public function tracert()
+    {
+        $tracert = false;
+        $host = escapeshellcmd($this->host);
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $exec_string = 'tracert '.$host;
+        } else {
+            $exec_string = 'traceroute '.$host;
+        }
+
+        if ($this->getCustomCommands()) {
+            $exec_string .= ' '.$this->getCustomCommands();
+        }
+        exec($exec_string, $output, $return);
+        $this->setCommandOutput(implode('\n', $output));
+        $output = array_values(array_filter($output));
+        if (!empty($output[1])) {
+            $tracert = $output[1];
+        }
+        return $tracert;
     }
 }
