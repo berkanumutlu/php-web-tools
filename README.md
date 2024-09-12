@@ -20,9 +20,11 @@ It is a project that contains tools that you can use on your web page.
 - Ping
 ![screenshot01-ping-form](screenshots/ping.png)
 - Nslookup
-![screenshot01-nslookup-form](screenshots/nslookup.png)
+![screenshot02-nslookup-form](screenshots/nslookup.png)
 - Tracert
-![screenshot01-tracert-form](screenshots/tracert.png)
+![screenshot03-tracert-form](screenshots/tracert.png)
+- Whois
+![screenshot04-whois-form](screenshots/whois.png)
 
 ## License
 
