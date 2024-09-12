@@ -420,4 +420,21 @@ class WebTools
         }
         return $tracert;
     }
+
+    public function whois()
+    {
+        $whois = false;
+        $host = escapeshellcmd($this->host);
+        $exec_string = 'whois '.$host;
+        if ($this->getCustomCommands()) {
+            $exec_string .= ' '.$this->getCustomCommands();
+        }
+        exec($exec_string, $output, $return);
+        $this->setCommandOutput(implode('\n', $output));
+        $output = array_values(array_filter($output));
+        if (!empty($output[1])) {
+            $whois = $output[1];
+        }
+        return $whois;
+    }
 }

@@ -110,3 +110,33 @@ if (!empty($_POST['tracert_form'])) {
     echo $response->toJson();
     return true;
 }
+if (!empty($_POST['whois_form'])) {
+    $response = new \App\Library\Response();
+    if (empty(trim($_POST['hostname']))) {
+        $response->setMessage('Please fill in the required fields.');
+    } else {
+        try {
+            $hostname = !empty($_POST["hostname"]) ? trim($_POST["hostname"]) : null;
+            $web_tool = new \App\Library\WebTools();
+            $web_tool->setHost($hostname);
+            if (!empty($_POST["parameters"])) {
+                $web_tool->setCustomCommands(trim($_POST["parameters"]));
+            }
+            $whois = $web_tool->whois();
+            if (!empty($whois)) {
+                $response->setMessage($whois);
+                if (!empty($web_tool->getCommandOutput())) {
+                    $response->setData(str_replace('\n', '<br>', $web_tool->getCommandOutput()));
+                }
+                $response->setStatus(true);
+            } else {
+                $response->setMessage('Host could not be reached.');
+                $response->setStatus(false);
+            }
+        } catch (\Exception $e) {
+            $response->setMessage($e->getMessage());
+        }
+    }
+    echo $response->toJson();
+    return true;
+}
