@@ -54,6 +54,13 @@
                                     aria-selected="true">Whois
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-portchecker-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-portchecker" type="button" role="tab"
+                                    aria-controls="pills-portchecker"
+                                    aria-selected="true">Portchecker
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-ping" role="tabpanel"
@@ -179,6 +186,30 @@
                                         <div class="mb-3">
                                             <label for="parameters">Parameters (optional)</label>
                                             <input type="text" id="parameters" name="parameters" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php include 'components/_button_form_submit.html'; ?>
+                            </form>
+                            <?php include 'components/_alert.html'; ?>
+                            <?php include 'components/_code_block.html'; ?>
+                        </div>
+                        <div class="tab-pane fade" id="pills-portchecker" role="tabpanel"
+                             aria-labelledby="pills-portchecker-tab" tabindex="1">
+                            <form action="ajax.php" method="POST" class="form-portchecker input-group-form">
+                                <input type="hidden" name="portchecker_form" value="1">
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="mb-3">
+                                            <label for="hostname">Hostname</label>
+                                            <input type="text" id="hostname" name="hostname" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <div class="mb-3">
+                                            <label for="port">Port</label>
+                                            <input type="text" id="port" name="port" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
