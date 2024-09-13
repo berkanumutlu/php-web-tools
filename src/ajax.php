@@ -140,3 +140,29 @@ if (!empty($_POST['whois_form'])) {
     echo $response->toJson();
     return true;
 }
+if (!empty($_POST['portchecker_form'])) {
+    $response = new \App\Library\Response();
+    if (empty(trim($_POST['hostname'])) || empty(trim($_POST['port']))) {
+        $response->setMessage('Please fill in the required fields.');
+    } else {
+        try {
+            $hostname = !empty($_POST["hostname"]) ? trim($_POST["hostname"]) : null;
+            $port = !empty($_POST["port"]) ? trim($_POST["port"]) : null;
+            $web_tool = new \App\Library\WebTools();
+            $web_tool->setHost($hostname);
+            $web_tool->setPort($port);
+            $portchecker = $web_tool->portchecker();
+            if (!empty($portchecker)) {
+                $response->setMessage($hostname.':'.$port.' '.'('.getservbyport($port, 'tcp').') is open.');
+                $response->setStatus(true);
+            } else {
+                $response->setMessage($hostname.':'.$port.' is not responding.');
+                $response->setStatus(false);
+            }
+        } catch (\Exception $e) {
+            $response->setMessage($e->getMessage());
+        }
+    }
+    echo $response->toJson();
+    return true;
+}

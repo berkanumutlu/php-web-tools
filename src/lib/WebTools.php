@@ -421,6 +421,9 @@ class WebTools
         return $tracert;
     }
 
+    /**
+     * @return false|mixed
+     */
     public function whois()
     {
         $whois = false;
@@ -436,5 +439,20 @@ class WebTools
             $whois = $output[1];
         }
         return $whois;
+    }
+
+    /**
+     * @return bool
+     */
+    public function portchecker()
+    {
+        $host = $this->getHost();
+        $port = $this->getPort();
+        $connection = @fsockopen($host, $port, $error_code, $error_message, $this->timeout);
+        if (is_resource($connection)) {
+            fclose($connection);
+            return true;
+        }
+        return false;
     }
 }
