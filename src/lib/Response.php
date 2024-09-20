@@ -163,14 +163,14 @@ class Response
      */
     public function toObject()
     {
-        $response = new stdClass();
-        $response->date = $this->getDate();
-        $response->status = $this->isStatus();
-        $response->code = $this->getStatusCode();
-        $response->status_text = $this->getStatusText();
-        $response->message = $this->getMessage();
-        $response->data = $this->getData();
-        return $response;
+        $object = new stdClass();
+        $object->date = $this->getDate();
+        $object->status = $this->isStatus();
+        $object->code = $this->getStatusCode();
+        $object->status_text = $this->getStatusText();
+        $object->message = $this->getMessage();
+        $object->data = $this->getData();
+        return $object;
     }
 
     /**
